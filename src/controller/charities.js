@@ -6,9 +6,10 @@ export default({ config, db }) => {
   let api = Router();
 
   // 'v1/charities/add'
-  api.post('/add', (res, req) => {
-    let newCharity = new Charity();
+  api.post('/add', (req, res) => {
+    let newCharity = new Charities();
     newCharity.name = req.body.name;
+    newCharity.logo_url = req.body.logo_url;
 
     newCharity.save(err => {
       if (err) {
