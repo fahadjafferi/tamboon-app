@@ -1,7 +1,6 @@
 import mongoose from 'mongoose';
 import { Router } from 'express';
 import Charities from '../model/charities';
-import Donations from '../model/donations';
 
 export default({ config, db }) => {
   let api = Router();
@@ -72,11 +71,26 @@ export default({ config, db }) => {
 
     // post donations to charity
     // '/v1/charities/donations/add'
-    api.post('/donations/add', (req, res) => {
+    /* api.post('/donations/add', (req, res) => {
       let newDonation = new Donations();
       newDonation.name = req.body.name;
       newDonation.token = req.body.token;
       newDonation.amount = req.body.amount;
+
+      fetch('https://api.omise.co/charges', {
+        method: 'POST',
+        headers: new Headers(),
+        body: JSON.stringify({
+          'amount': 'newDonation.amount',
+          'currency': 'thb',
+          'card': 'newDonation.token'
+        })
+      }), (err, charge) => {
+          if (err) {
+           res.send(err);
+          }
+            res.json({ message: "Charged Card Successfully" });
+          },
 
       newDonation.save(err => {
         if (err) {
@@ -97,14 +111,14 @@ export default({ config, db }) => {
     });
 
     // '/v1/charities/donations' - Read
-    api.get('/doantions', (req, res) => {
+    api.get('donations', (req, res) => {
       Donations.find({}, (err, donations) => {
         if (err) {
           res.send(err);
         }
         res.json(donations);
       });
-    });
+    });*/
 
 
   return api;
