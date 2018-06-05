@@ -12,6 +12,7 @@ export default({ config, db }) => {
     newDonation.token = req.body.token;
     newDonation.amount = req.body.amount;
 
+    // Creates a charge using the supplied token against the Omise API
     /*fetch('https://api.omise.co/charges', {
       method: 'POST',
       headers: new Headers(),

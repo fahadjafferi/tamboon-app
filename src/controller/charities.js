@@ -59,15 +59,28 @@ export default({ config, db }) => {
 
   // '/v1/charities/:id' - Delete Charity
   api.delete('/:id', (req, res) => {
-    Charities.remove({
-      _id: req.params.id
-    }, (err, charities) => {
+    Charities.findById(req.params.id, (err, charities) => {
       if (err) {
-       res.send(err);
+        res.status(500).send(err);
+        //return alllows to exit out the function if reach error
+        return;
       }
-        res.json({ message: "Charity Successfully Removed!" });
+      if (charities === null) {
+        res.status(404).send("Charities not found");
+        return;
+      }
+      Charities.remove({
+        _id: req.params.id
+      }, (err, charities) => {
+        if (err) {
+         res.stauts(500).send(err);
+         return;
+        }
+          res.json({ message: "Charity Successfully Removed!" });
+        });
       });
     });
+
 
     // post donations to charity
     // '/v1/charities/donations/add'
