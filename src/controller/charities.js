@@ -2,6 +2,11 @@ import mongoose from 'mongoose';
 import { Router } from 'express';
 import Charities from '../model/charities';
 
+// list of charities hard coded
+var fs = require('fs');
+var data = fs.readFileSync(__dirname + '/charitiesfile.json');
+var charitiesList = JSON.parse(data);
+
 export default({ config, db }) => {
   let api = Router();
 
@@ -19,6 +24,12 @@ export default({ config, db }) => {
       res.json({ message: 'Charity saved successfully' });
     });
   });
+
+  // Get all charities
+  api.get('/all', (req, res) => {
+    res.send(charitiesList);
+  });
+
 
   // '/v1/charities' - Read
   api.get('/', (req, res) => {
@@ -80,58 +91,6 @@ export default({ config, db }) => {
         });
       });
     });
-
-
-    // post donations to charity
-    // '/v1/charities/donations/add'
-    /* api.post('/donations/add', (req, res) => {
-      let newDonation = new Donations();
-      newDonation.name = req.body.name;
-      newDonation.token = req.body.token;
-      newDonation.amount = req.body.amount;
-
-      fetch('https://api.omise.co/charges', {
-        method: 'POST',
-        headers: new Headers(),
-        body: JSON.stringify({
-          'amount': 'newDonation.amount',
-          'currency': 'thb',
-          'card': 'newDonation.token'
-        })
-      }), (err, charge) => {
-          if (err) {
-           res.send(err);
-          }
-            res.json({ message: "Charged Card Successfully" });
-          },
-
-      newDonation.save(err => {
-        if (err) {
-          res.send(err);
-        }
-        res.json({ message: 'Donation Recieved Successfully' });
-      });
-    });
-
-    // '/v1/charities/donations' - Read donations
-    api.get('/donations/:id', (req, res) => {
-      Donations.findById(req.params.id, (err, donations) => {
-        if (err) {
-          res.send(err);
-        }
-        res.json(donations);
-      });
-    });
-
-    // '/v1/charities/donations' - Read
-    api.get('donations', (req, res) => {
-      Donations.find({}, (err, donations) => {
-        if (err) {
-          res.send(err);
-        }
-        res.json(donations);
-      });
-    });*/
 
 
   return api;

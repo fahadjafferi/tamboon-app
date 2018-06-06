@@ -2,6 +2,9 @@ import mongoose from 'mongoose';
 import { Router } from 'express';
 import Donations from '../model/donations';
 
+// list of donations hard coded
+
+
 export default({ config, db }) => {
   let api = Router();
 
@@ -11,6 +14,15 @@ export default({ config, db }) => {
     newDonation.name = req.body.name;
     newDonation.token = req.body.token;
     newDonation.amount = req.body.amount;
+
+    var fs = require('fs');
+    var data = JSON.stringify(newDonation, null, 2);
+    fs.writeFile(__dirname + '/donationsfile.json', data, (err) => {
+      if (err) {
+        res.send(err);
+      }
+      res.json({ message: 'Donation Recieved Successfully' });
+    });
 
     // Creates a charge using the supplied token against the Omise API
     /*fetch('https://api.omise.co/charges', {
@@ -34,6 +46,14 @@ export default({ config, db }) => {
       }
       res.json({ message: 'Donation Recieved Successfully' });
     });
+  });
+
+  // get all donations
+  api.get('/all', (req, res) => {
+    var fs = require('fs');
+    var data = fs.readFileSync(__dirname + '/donationsfile.json');
+    var donationsList = JSON.parse(data);
+    res.send(donationsList);
   });
 
   // '/v1/donations/:id' - Read donations by id
