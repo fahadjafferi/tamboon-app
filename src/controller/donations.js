@@ -1,6 +1,8 @@
 import mongoose from 'mongoose';
 import { Router } from 'express';
 import Donations from '../model/donations';
+import promise from 'es6-promise';
+import isomorphic from "isomorphic-fetch";
 
 // list of donations hard coded
 
@@ -25,7 +27,7 @@ export default({ config, db }) => {
     });
 
     // Creates a charge using the supplied token against the Omise API
-    /*fetch('https://api.omise.co/charges', {
+    fetch('https://api.omise.co/charges', {
       method: 'POST',
       headers: new Headers(),
       body: JSON.stringify({
@@ -38,7 +40,7 @@ export default({ config, db }) => {
          res.send(err);
         }
           res.json({ message: "Charged Card Successfully" });
-        },*/
+        };
 
     newDonation.save(err => {
       if (err) {
