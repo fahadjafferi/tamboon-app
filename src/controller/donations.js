@@ -23,17 +23,16 @@ export default({ config, db }) => {
       if (err) {
         res.send(err);
       }
-      res.json({ message: 'Donation Recieved Successfully' });
-    });
+      res.json({ message: 'Donation Recieved Successfully' })
 
     // Creates a charge using the supplied token against the Omise API
     fetch('https://api.omise.co/charges', {
       method: 'POST',
-      headers: new Headers(),
+      headers: {'Content-type': 'application/json'},
       body: JSON.stringify({
-        'amount': 'newDonation.amount',
+        'amount': newDonation.amount,
         'currency': 'thb',
-        'card': 'newDonation.token'
+        'card': newDonation.token
       })
     }), (err, charge) => {
         if (err) {
@@ -41,6 +40,7 @@ export default({ config, db }) => {
         }
           res.json({ message: "Charged Card Successfully" });
         };
+    });
 
     newDonation.save(err => {
       if (err) {
